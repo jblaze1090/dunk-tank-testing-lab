@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dunk Tank Trajectory Testing Lab</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#17324b;background:#f3f8fc}*{box-sizing:border-box}body{margin:0;padding:24px}.wrap{max-width:1050px;margin:auto}.hero{background:linear-gradient(115deg,#103d63,#176e91);color:white;border-radius:18px;padding:26px 30px;margin-bottom:18px}.hero h1{font-size:clamp(1.45rem,3vw,2.1rem);margin:0 0 8px}.hero p{margin:0;line-height:1.5}.grid{display:grid;grid-template-columns:290px minmax(0,1fr);gap:16px}.panel{background:white;border:1px solid #d9e5ee;border-radius:15px;padding:20px;box-shadow:0 3px 12px #163d5610}.panel h2{font-size:1.13rem;margin:0 0 17px}.control{margin:0 0 23px}.control label{display:flex;justify-content:space-between;gap:10px;font-weight:650;margin-bottom:12px}.control output{color:#075e8b;font-variant-numeric:tabular-nums}.control input{width:100%;accent-color:#087ca3;cursor:pointer}.ends{display:flex;justify-content:space-between;font-size:.78rem;color:#53697b}.presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}button{border:1px solid #aac8d8;background:#eaf6fb;color:#08496a;border-radius:9px;padding:9px 12px;font-weight:650;cursor:pointer}button:hover,button:focus-visible{background:#d4effb;outline:2px solid #77b5d6;outline-offset:2px}.note{font-size:.84rem;color:#516879;line-height:1.5;margin-top:18px}.chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.legend{display:flex;gap:15px;align-items:center;font-size:.82rem;color:#526777}.swatch{display:inline-block;width:13px;height:4px;background:#0a8d9d;vertical-align:middle;margin-right:5px}.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#ec7846;vertical-align:middle;margin-right:5px}svg{display:block;width:100%;height:auto;overflow:visible}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.stat{border:1px solid #dbe8ef;background:#f7fbfe;border-radius:10px;padding:13px}.stat .key{display:block;font-size:.79rem;color:#557086}.stat strong{display:block;margin-top:5px;font-size:1.2rem;font-variant-numeric:tabular-nums}.status{margin-top:14px;padding:13px 15px;border-radius:10px;background:#eaf4f9;border-left:4px solid #177a9a;line-height:1.5}.status.hit{background:#e7f7ed;border-color:#238b52}.status.miss{background:#fff5e9;border-color:#db8740}.math{margin-top:16px;font-size:.9rem;line-height:1.65;color:#334f62}.math code{background:#eef4f8;padding:2px 5px;border-radius:4px}.task{margin-top:16px;line-height:1.65}.task h2{margin-bottom:7px}.task ol{padding-left:22px;margin:7px 0}.small{font-size:.82rem;color:#566c7b}@media(max-width:760px){body{padding:12px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.hero{padding:20px}.panel{padding:16px}}
+</style>
+</head>
+<body><main class="wrap">
+<header class="hero"><h1>🎯 Dunk Tank Trajectory Testing Lab</h1><p>Activity 2 · Testing and evaluation · Year 12 ATAR Physics</p></header>
+<div class="grid">
+<section class="panel" aria-labelledby="controls"><h2 id="controls">Launch controls</h2>
+<div class="control"><label for="angle">Launch angle <output id="angleValue" for="angle">45°</output></label><input id="angle" type="range" min="0" max="90" step="1" value="45"><div class="ends"><span>0°</span><span>90°</span></div></div>
+<div class="control"><label for="speed">Initial velocity <output id="speedValue" for="speed">12.0 m/s</output></label><input id="speed" type="range" min="0" max="20" step="0.1" value="12"><div class="ends"><span>0 m/s</span><span>20 m/s maximum</span></div></div>
+<div class="presets"><button id="reset" type="button">Reset</button><button id="example" type="button">Try 45°, 13.6 m/s</button></div>
+<p class="note">Target centre: <strong>(15 m, 3 m)</strong><br>Gravity: <strong>9.8 m/s²</strong> downwards<br>Air resistance: <strong>ignored</strong><br>Launch point: <strong>(0 m, 0 m)</strong></p>
+</section>
+<section class="panel" aria-labelledby="chartTitle"><div class="chart-head"><h2 id="chartTitle">Projectile trajectory</h2><div class="legend"><span><i class="swatch"></i>Trajectory</span><span><i class="dot"></i>Target</span></div></div>
+<svg id="plot" viewBox="0 0 720 380" role="img" aria-label="Graph of projectile trajectory and target position, updated by launch controls"><defs><clipPath id="clip"><rect x="65" y="22" width="625" height="302"/></clipPath></defs><g id="gridlines"></g><g id="axes"></g><g clip-path="url(#clip)"><path id="trajectory" fill="none" stroke="#078e9e" stroke-width="3.5" stroke-linecap="round"/><line id="targetLine" stroke="#e59a5c" stroke-dasharray="5 6" stroke-width="1.5"/><circle id="target" r="8" fill="#ec7846" stroke="#a84725" stroke-width="1.5"/><circle id="atTarget" r="5" fill="#078e9e" stroke="white" stroke-width="1.5"/></g><text id="targetLabel" fill="#9e4b24" font-size="14" font-weight="600">Target (15, 3)</text></svg>
+<div class="stats"><div class="stat"><span class="key">Height at x = 15 m</span><strong id="height">—</strong></div><div class="stat"><span class="key">Vertical difference</span><strong id="difference">—</strong></div><div class="stat"><span class="key">Horizontal speed</span><strong id="horizontal">—</strong></div></div>
+<div id="status" class="status" role="status" aria-live="polite"></div>
+<p class="small">A hit means the ball passes within ±0.20 m vertically of the target centre when x = 15 m. This is a simplified target tolerance, not a full collision simulation.</p>
+</section></div>
+<section class="panel task"><h2>🧪 Your testing task</h2><ol>
+<li>Use the projectile motion principles explored in Activity 1 to predict a suitable launch angle and speed for this new target.</li>
+<li>Compare the predicted projectile height at 15 m with the target height of 3 m.</li>
+<li>Change one variable at a time. Find a combination that reaches the target without exceeding 20 m/s.</li>
+<li>Record your final angle, speed, height at 15 m and vertical difference.</li>
+<li>Explain whether the simulation agrees with your calculations and how this testing process could inform your Scratch game.</li>
+</ol><p class="small">This tool is for practice and evaluation. It does not submit your answers automatically.</p></section>
+<section class="panel math"><h2>📐 Physics model</h2><p>Horizontal displacement: <code>x = v₀ cos(θ) × t</code><br>Vertical displacement: <code>y = v₀ sin(θ) × t − ½gt²</code><br>At horizontal position <code>x = 15 m</code>, time is <code>t = 15 / (v₀ cos(θ))</code>, provided the horizontal velocity is positive.</p><p class="small">Positive y is upwards. The graph shows the ideal trajectory until the projectile returns to launch height; the elevated target is checked at x = 15 m. At zero horizontal velocity the target cannot be reached.</p></section>
+</main>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const angle=$('angle'),speed=$('speed');
+const left=65,right=690,top=22,bottom=324,W=right-left,H=bottom-top;
+const ns='http://www.w3.org/2000/svg';
+const targetX=15,targetY=3,tolerance=0.20,g=9.8;
+function el(tag,attrs,parent){const n=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);parent.appendChild(n);return n}
+function draw(){
+ const a=Number(angle.value),v=Number(speed.value),r=a*Math.PI/180,vx=v*Math.cos(r),vy=v*Math.sin(r);
+ $('angleValue').textContent=a+'°';$('speedValue').textContent=v.toFixed(1)+' m/s';
+ const maxX=20,maxY=10,X=x=>left+x/maxX*W,Y=y=>bottom-y/maxY*H;
+ const grid=$('gridlines'),axes=$('axes');grid.replaceChildren();axes.replaceChildren();
+ for(let x=0;x<=20;x+=2){el('line',{x1:X(x),y1:top,x2:X(x),y2:bottom,stroke:'#e6edf2'},grid);const t=el('text',{x:X(x),y:bottom+20,'text-anchor':'middle','font-size':12,fill:'#536b7e'},axes);t.textContent=x}
+ for(let y=0;y<=10;y+=2){el('line',{x1:left,y1:Y(y),x2:right,y2:Y(y),stroke:'#e6edf2'},grid);const t=el('text',{x:left-12,y:Y(y)+4,'text-anchor':'end','font-size':12,fill:'#536b7e'},axes);t.textContent=y}
+ el('line',{x1:left,y1:top,x2:left,y2:bottom,stroke:'#8196a7','stroke-width':1.5},axes);el('line',{x1:left,y1:bottom,x2:right,y2:bottom,stroke:'#8196a7','stroke-width':1.5},axes);
+ let t=el('text',{x:(left+right)/2,y:375,'text-anchor':'middle','font-size':14,fill:'#405b6f'},axes);t.textContent='Horizontal distance (m)';
+ t=el('text',{x:16,y:(top+bottom)/2,transform:`rotate(-90 16 ${(top+bottom)/2})`,'text-anchor':'middle','font-size':14,fill:'#405b6f'},axes);t.textContent='Height above launch (m)';
+ $('target').setAttribute('cx',X(targetX));$('target').setAttribute('cy',Y(targetY));
+ $('targetLabel').setAttribute('x',X(targetX)+12);$('targetLabel').setAttribute('y',Y(targetY)-12);
+ $('targetLine').setAttribute('x1',X(targetX));$('targetLine').setAttribute('x2',X(targetX));$('targetLine').setAttribute('y1',Y(0));$('targetLine').setAttribute('y2',Y(targetY));
+ let path='';if(v>0){const total=Math.max(0,2*vy/g);for(let i=0;i<=300;i++){const time=total*i/300,x=vx*time,y=vy*time-.5*g*time*time;if(x>maxX)break;path+=(path?' L ':'M ')+X(x).toFixed(2)+' '+Y(Math.max(0,y)).toFixed(2)}}
+ $('trajectory').setAttribute('d',path);
+ const valid=vx>1e-7&&v>0,at=valid?targetX/vx:NaN,h=valid?vy*at-.5*g*at*at:NaN,delta=h-targetY,reaches=valid&&h>=0,hit=reaches&&Math.abs(delta)<=tolerance;
+ $('atTarget').setAttribute('visibility',reaches?'visible':'hidden');if(reaches){$('atTarget').setAttribute('cx',X(targetX));$('atTarget').setAttribute('cy',Y(h))}
+ $('height').textContent=valid?h.toFixed(2)+' m':'N/A';$('difference').textContent=valid?(delta>=0?'+':'')+delta.toFixed(2)+' m':'N/A';$('horizontal').textContent=vx.toFixed(2)+' m/s';
+ const status=$('status');status.className='status '+(hit?'hit':'miss');
+ if(!valid)status.textContent='No horizontal motion towards the target. Increase speed or use an angle below 90°.';
+ else if(!reaches)status.textContent='Miss: the projectile falls below launch height before it reaches x = 15 m.';
+ else if(hit)status.textContent='Target reached! The projectile passes within 0.20 m of the target centre at x = 15 m.';
+ else if(delta>0)status.textContent='Too high at the target: the projectile passes '+delta.toFixed(2)+' m above the target centre.';
+ else status.textContent='Too low at the target: the projectile passes '+Math.abs(delta).toFixed(2)+' m below the target centre.';
+}
+angle.addEventListener('input',draw);speed.addEventListener('input',draw);
+$('reset').addEventListener('click',()=>{angle.value=45;speed.value=12;draw()});
+$('example').addEventListener('click',()=>{angle.value=45;speed.value=13.6;draw()});
+draw();
+})();
+</script>
+</body></html>
